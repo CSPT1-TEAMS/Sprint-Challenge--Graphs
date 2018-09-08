@@ -1,7 +1,7 @@
 #/usr/bin/env python
 
 import sys
-
+from collections import deque
 
 # Edge class
 class Edge:
@@ -45,6 +45,45 @@ class Graph:
         pass
 
     def bfs(self, start):
+        queue = deque()
+        for v in graph.vertices:
+            v.color = 'white'
+            v.parent = None
+        start.color = 'gray'
+        queue.append(start)    
+
+        while queue:
+            u = queue[0]
+            for v in u.neighbors:
+                if v.color == 'white':
+                    v.color = 'gray'
+                    v.parent = u
+                    queue.append(v)
+            queue.popleft()
+            u.color = 'black'        
+        # nodes = []
+        # history = []
+        # parent = []
+        # my_queue = collections.deque()
+
+        # for v in self.vertices:
+        #     history[v] = 'unvisited'
+        #     parent[v] = None
+        # history[start] = 'scheduled'
+        # my_queue.append(str(start))
+
+        # while len(my_queue) != 0:
+        #     node = my_queue[0]
+        #     neighbors = graph.vertices[node]
+
+        #     for n in neighbors:
+        #         if history[n] == 'unvisited':
+        #             my_queue.append(str(n))
+        #             history[n] = 'scheduled'
+        #     history[node] = 'visited'
+        #     nodes.append(my_queue.popleft())
+        # print(history)    
+        # return nodes
         """
         Breadth-First search from an input starting Vertex
         Should maintain parent references back from neighbors to their parent.
@@ -110,7 +149,7 @@ if __name__ == '__main__':
     graph.vertices.append(vertF)
     graph.vertices.append(vertG)
     graph.vertices.append(vertH)
-
+    
     # Look up the hosts passed in from the command line by
     # name to see if we can find them.
     hostAVert = graph.find_vertex(sys.argv[1])
@@ -127,3 +166,5 @@ if __name__ == '__main__':
 
     # Show the route from one Vertex to the other
     graph.route(hostAVert, hostBVert)
+
+    print('BFS: ' + str(graph.bfs(graph,vertA)))
