@@ -42,48 +42,27 @@ class Graph:
         @return {Vertex} the found Vertex
         """
         # !!!! IMPLEMENT ME
-        pass
+        for v in self.vertices:
+            if v.value == value:
+                return v
+        return None        
 
     def bfs(self, start):
-        queue = deque()
-        for v in graph.vertices:
-            v.color = 'white'
-            v.parent = None
+        queue = []
         start.color = 'gray'
-        queue.append(start)    
+        queue.append(start)
 
         while queue:
-            u = queue[0]
-            for v in u.neighbors:
-                if v.color == 'white':
-                    v.color = 'gray'
-                    v.parent = u
-                    queue.append(v)
-            queue.popleft()
-            u.color = 'black'        
-        # nodes = []
-        # history = []
-        # parent = []
-        # my_queue = collections.deque()
-
-        # for v in self.vertices:
-        #     history[v] = 'unvisited'
-        #     parent[v] = None
-        # history[start] = 'scheduled'
-        # my_queue.append(str(start))
-
-        # while len(my_queue) != 0:
-        #     node = my_queue[0]
-        #     neighbors = graph.vertices[node]
-
-        #     for n in neighbors:
-        #         if history[n] == 'unvisited':
-        #             my_queue.append(str(n))
-        #             history[n] = 'scheduled'
-        #     history[node] = 'visited'
-        #     nodes.append(my_queue.popleft())
-        # print(history)    
-        # return nodes
+            vertex = queue[0]
+            for sibling in vertex.edges:
+                dest = sibling.destination
+                if dest.color == 'white':
+                    dest.color = 'gray'
+                    sibling.parent = vertex
+                    queue.append(dest)
+            queue = queue[1:]
+            vertex.color = 'black'
+        
         """
         Breadth-First search from an input starting Vertex
         Should maintain parent references back from neighbors to their parent.
@@ -101,7 +80,16 @@ class Graph:
         @param {Vertex} start: The starting Vertex to follow and print
         """
         # !!!! IMPLEMENT ME
-        pass
+        current = start
+        output = ''
+
+        while current is not None:
+            output += current.value
+            if current.parent is not None:
+                output += ' --> '
+                current = current.parent
+            else:       
+                current = None   
 
     def route(self, start, end):
         # BFS to build the parent reference tree
@@ -154,6 +142,7 @@ if __name__ == '__main__':
     # name to see if we can find them.
     hostAVert = graph.find_vertex(sys.argv[1])
 
+
     if hostAVert is None:
         print('routing.py: could not find host: ', sys.argv[1])
         sys.exit()
@@ -167,4 +156,4 @@ if __name__ == '__main__':
     # Show the route from one Vertex to the other
     graph.route(hostAVert, hostBVert)
 
-    print('BFS: ' + str(graph.bfs(graph,vertA)))
+    print('BFS: ' + str(graph.bfs(vertA)))

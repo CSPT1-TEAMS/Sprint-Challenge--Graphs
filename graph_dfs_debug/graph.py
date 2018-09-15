@@ -25,53 +25,53 @@ class Graph:
         if bidirectional:
             self.vertices[end].add(start)
 
-    def dfs(self, graph):
-        def dfs_helper(v):
-            history[v] = 'scheduled'
-            nodes.append(v)
-            for n in graph.vertices[v]:
-                if history[n] == 'unvisited':
-                    dfs_helper(n)
-            history[v] = 'visited'
-        nodes = []
-        history = {}
-        for key in graph.vertices.keys():
-            history[key] = 'unvisited'
-        for v in graph.vertices:
-            if history[v] == 'unvisited':
-                dfs_helper(v)
-        return nodes
-    
+    def dfs(self, start, target=None):
+        nodes = [] #x
+        nodes.append(start)
+        visited = set() #y
+        while nodes:
+            current = nodes.pop() #z
+            if current == target:
+                break
+            visited.add(current)    
+            nodes.extend(self.vertices[current] - visited)
+        for v in visited:
+            print(v)    
+        return visited
+
+    def graph_rec(self, start, target=None):
+        visited = set()
+        visited.add(start)
+        for v in self.vertices[start]:
+            if v == target:
+                pass
+            if v not in visited:    
+                visited.add(v)
+                self.graph_rec(v)
+        return v
 
     def find_components(self):
-        draw_components = []
         visited = set()
-        for v in graph.vertices.keys():
-            if v not in visited:
-                component = self.dfs(graph)
-                draw_components.append(component)
-                for c in component:
-                    visited.update(c)
-        return draw_components
-        # visited = set()
-        # current_component = 0
+        current_component = 0
 
-        # for vertex in self.vertices:
-        #     if vertex in visited:
-        #         reachable = self.dfs(vertex)
-        #         for other_vertex in reachable:
-        #             other_vertex.component = current_component
-        #         current_component += 1
-        #         visited.update(reachable)
-        # self.components = current_component
+        # for v in self.vertices.keys():
+        #     print(self.dfs(v))
+        #for every vertex in graph
+        for vertex in self.vertices:
+            if vertex not in visited:
+                reachable = self.dfs(vertex)
+                for other_vertex in reachable:
+                    other_vertex.component = current_component
+                current_component += 1
+                visited.update(reachable)
+        self.components = current_component   
 
-graph = Graph()  # Instantiate your graph
-graph.add_vertex('0')
-graph.add_vertex('1')
-graph.add_vertex('2')
-graph.add_vertex('3')
-graph.add_edge('0', '1')
-graph.add_edge('0', '3')
-# print(graph.vertices)
-print('DFS:  ' + str(graph.dfs(graph)))
-print('CC: ' + str(graph.find_components()))
+
+# graph = Graph()  # Instantiate your graph
+# graph.add_vertex('0')
+# graph.add_vertex('1')
+# graph.add_vertex('2')
+# graph.add_vertex('3')
+# graph.add_edge('0', '1')
+# graph.add_edge('0', '3')
+# # graph.dfs(graph, '0')
