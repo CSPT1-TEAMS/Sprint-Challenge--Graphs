@@ -58,7 +58,7 @@ class Graph:
                 dest = sibling.destination
                 if dest.color == 'white':
                     dest.color = 'gray'
-                    sibling.parent = vertex
+                    dest.parent = vertex
                     queue.append(dest)
             queue = queue[1:]
             vertex.color = 'black'
@@ -90,7 +90,7 @@ class Graph:
                 current = current.parent
             else:       
                 current = None   
-
+        print(output)
     def route(self, start, end):
         # BFS to build the parent reference tree
         self.bfs(end)
@@ -154,6 +154,4 @@ if __name__ == '__main__':
         sys.exit()
 
     # Show the route from one Vertex to the other
-    graph.route(hostAVert, hostBVert)
-
-    print('BFS: ' + str(graph.bfs(vertA)))
+graph.route(hostAVert, hostBVert)
